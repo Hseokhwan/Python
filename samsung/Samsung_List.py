@@ -30,8 +30,8 @@ else:
     elif now.weekday() == 5: effect_date = (now + timedelta(3)).strftime('%Y-%m-%d')
     else: effect_date = (now + timedelta(1)).strftime('%Y-%m-%d')
 
-#sysdate = now.strftime('20211230') # 발행리스트 파일 날짜
-#effect_date = now.strftime('2021-12-31') # 발행일 날짜
+#sysdate = now.strftime('20220103') # 발행리스트 파일 날짜
+#effect_date = now.strftime('2022-01-04') # 발행일 날짜
 
 path = r'Y:\(0000)금융공학연구소\402.파생상품팀\파생상품팀 이슈\06. Live\20210517_삼성증권 Live\발행리스트'
 file_list = os.listdir(path)
