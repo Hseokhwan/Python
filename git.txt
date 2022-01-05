@@ -10,8 +10,13 @@ git config --global user.name "Hseokhwan"
 git config --global user.email "tjrghks2322@naver.com"
 - 확인
 git config --list
--- 운영체재별 문자열
+- 운영체재별 문자열 차이
 git config --global core.autocrlf true (input - mac)
+- 명령어 정보
+git config -h
+- 명령어 custom
+git config --global alias.st status  ( status -> st )
+
 
 [Working Area]
 - 로컬 폴더 설정(저장소 생성, working directory)
@@ -22,27 +27,29 @@ rm -r .git
 [Staging]
 - git 저장소 파일 상태 (add 내역)
 git status   (초록색: staging, 빨간색: not staged)
-ls
-.gitignore (저장하지 않을 파일 설정)
+ls  ls-al
+echo *.txt > .gitignore (저장하지 않을 파일 설정)
 
 - 스테이징 영역  add (임시 저장 개념)
-git add .  (하위폴더까지 전부 add)
+git add .  / git add * (하위폴더까지 전부 add)  git add *.py ( py만 add)
 - 수정된 파일 전부 추가
 git add -A
 - 저장소 add 삭제
 git rm -r  --cached . (전부, 원격저장소만 삭제)
 - 스테이징 취소
-git reset 
+git reset ('name')
 
 [Local commit]
 - 커밋 추가 (업데이트 확정 & 업로드 전)
 git commit -m "커밋 메세지"
 - 커밋 로그
-git log
+git log (--oneline)
 - 최근 커밋메세지 수정
 git commit --amend
 - 커밋메세지 수정
 git rebase -i HEAD~3  (숫자 체크할 갯수)
+- 커밋 삭제
+git reset HEAD^ (^ 갯수에 따라 최신순으로 취소)
 
 [Remote Push]
 - 레파지토리 연결 (원격 저장소)
@@ -75,7 +82,7 @@ git ls-remote --heads origin
 - github 변경사항 받아오기 (타인이 작업해서 변경된 경우) pull 하기 전에 commit 먼저!
 git pull origin main
 
-- github 내 저장소를 로컬로 복제
+- github 원격 저장소를 로컬로 복제
 git clone (git 저장소의 URL)
 
 - 삭제 (삭제 후 커밋, 푸쉬해야 github 파일 삭제)
