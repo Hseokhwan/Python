@@ -1,0 +1,93 @@
+[ Working -> Staging (add) -> Local (commit)-> Remote(push) ]
+git 로컬 폴더 설정 -> 브랜치 설정 -> 레파지토리 설정 -> 파일 커밋하여 git 저장소에 저장(로컬) -> github   업로드
+
+* working area -> git add -> staging area(커밋 준비 상태) -> commit(업데이트 확정) -> push
+* branch: main branch 에서 가지를 뻗어 작업이 마무리되면 메인 브랜치와 병합(merge) - head(현재 작업 중인 branch)
+
+[초기 설정]
+- 이름, 이메일 설정
+git config --global user.name "Hseokhwan"
+git config --global user.email "tjrghks2322@naver.com"
+- 확인
+git config --list
+-- 운영체재별 문자열
+git config --global core.autocrlf true (input - mac)
+
+[Working Area]
+- 로컬 폴더 설정(저장소 생성, working directory)
+git init
+- 삭제
+rm -r .git
+
+[Staging]
+- git 저장소 파일 상태 (add 내역)
+git status   (초록색: staging, 빨간색: not staged)
+ls
+.gitignore (저장하지 않을 파일 설정)
+
+- 스테이징 영역  add (임시 저장 개념)
+git add .  (하위폴더까지 전부 add)
+- 수정된 파일 전부 추가
+git add -A
+- 저장소 add 삭제
+git rm -r  --cached . (전부, 원격저장소만 삭제)
+- 스테이징 취소
+git reset 
+
+[Local commit]
+- 커밋 추가 (업데이트 확정 & 업로드 전)
+git commit -m "커밋 메세지"
+- 커밋 로그
+git log
+- 최근 커밋메세지 수정
+git commit --amend
+- 커밋메세지 수정
+git rebase -i HEAD~3  (숫자 체크할 갯수)
+
+[Remote Push]
+- 레파지토리 연결 (원격 저장소)
+git remote add origin https://github.com/Hseokhwan/python_fn.git
+- 연결 확인
+git remote -v
+- 연결 해제
+git remote remove origin
+
+- git hub 업로드
+git push -u origin main  (-u , update tracked files)
+git push
+- 강제 푸시
+git push -f origin main
+
+- 브랜치 네임 master -> main
+git branch -m master main
+- 브랜치 생성
+git branch "name"
+- 브랜치 삭제
+git branch -d "name"
+- 브랜치 리스트
+git branch
+- 브랜치 전환
+git checkout "name"
+
+- 리모트 브랜치 반영 id  확인
+git ls-remote --heads origin
+
+- github 변경사항 받아오기 (타인이 작업해서 변경된 경우) pull 하기 전에 commit 먼저!
+git pull origin main
+
+- github 내 저장소를 로컬로 복제
+git clone (git 저장소의 URL)
+
+- 삭제 (삭제 후 커밋, 푸쉬해야 github 파일 삭제)
+git rm "filename" (원격, 로컬저장소 모두 삭제)
+git rm  --cached  "filename" (원격저장소 삭제)
+
+- 로그
+git log --decorate --all --oneline
+
+
+<순서>
+git init
+git remote add origin 'url'
+git add '파일명'
+git commit -m 'message'
