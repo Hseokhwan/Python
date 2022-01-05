@@ -28,7 +28,7 @@ rm -r .git
 - git 저장소 파일 상태 (add 내역)
 git status   (초록색: staging, 빨간색: not staged)
 ls  ls-al
-echo *.txt > .gitignore (저장하지 않을 파일 설정)
+echo *.txt > .gitignore (저장하지 않을 파일 설정)  / touch .gitignore
 
 - 스테이징 영역  add (임시 저장 개념)
 git add .  / git add * (하위폴더까지 전부 add)  git add *.py ( py만 add)
@@ -98,3 +98,11 @@ git init
 git remote add origin 'url'
 git add '파일명'
 git commit -m 'message'
+
+
+<.gitignore>
+- .git 폴더에 파일 생성 touch .gitignore
+- 추가하지않을 파일 작성
+ex) 모든 txt -> *.txt
+특정 폴더 안에 txt : 폴더명/*.txt 
+또는 name.txt 
