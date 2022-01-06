@@ -96,6 +96,9 @@ git rm  --cached  "filename" (원격저장소 삭제)
 - 로그
 git log --decorate --all --oneline
 
+- 파일 이름 변경
+git mv 'oldname' 'newname' 
+
 
 <순서>
 git init
