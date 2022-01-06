@@ -1,5 +1,5 @@
 [ Working -> Staging (add) -> Local (commit)-> Remote(push) ]
-git 로컬 폴더 설정 -> 브랜치 설정 -> 레파지토리 설정 -> 파일 커밋하여 git 저장소에 저장(로컬) -> github   업로드
+git 로컬 폴더 설정 -> 브랜치 설정 -> 레파지토리 설정 -> 파일 커밋하여 git 저장소에 저장(로컬) -> github(원격저장소)   업로드
 
 * working area -> git add -> staging area(커밋 준비 상태) -> commit(업데이트 확정) -> push
 * branch: main branch 에서 가지를 뻗어 작업이 마무리되면 메인 브랜치와 병합(merge) - head(현재 작업 중인 branch)
@@ -23,10 +23,12 @@ git config --global alias.st status  ( status -> st )
 git init
 - 삭제
 rm -r .git
+- working directory 변경사항 확인
+git diff
 
 [Staging]
 - git 저장소 파일 상태 (add 내역)
-git status   (초록색: staging, 빨간색: not staged)
+git status   (초록색: staging, 빨간색: not staged) -s (짧게보기)) 
 ls  ls-al
 echo *.txt > .gitignore (저장하지 않을 파일 설정)  / touch .gitignore
 
@@ -38,10 +40,12 @@ git add -A
 git rm -r  --cached . (전부, 원격저장소만 삭제)
 - 스테이징 취소
 git reset ('name')
+- 스테이징 영역 변경사항 확인
+git diff staged
 
 [Local commit]
 - 커밋 추가 (업데이트 확정 & 업로드 전)
-git commit -m "커밋 메세지"
+git commit -m "커밋 메세지"   /  -am '메세지' (working d 까지 전부 커밋)
 - 커밋 로그
 git log (--oneline)
 - 최근 커밋메세지 수정
@@ -79,10 +83,10 @@ git checkout "name"
 - 리모트 브랜치 반영 id  확인
 git ls-remote --heads origin
 
-- github 변경사항 받아오기 (타인이 작업해서 변경된 경우) pull 하기 전에 commit 먼저!
+- github 변경사항 받아오기 (타인이 작업해서 변경된 경우) pull 하기 전에 변경사항 있다면 commit 먼저!
 git pull origin main
 
-- github 원격 저장소를 로컬로 복제
+- github 원격 저장소를 로컬로 복제 (처음)
 git clone (git 저장소의 URL)
 
 - 삭제 (삭제 후 커밋, 푸쉬해야 github 파일 삭제)
@@ -101,8 +105,8 @@ git commit -m 'message'
 
 
 <.gitignore>
-- .git 폴더에 파일 생성 touch .gitignore
+- 프로젝트 상위 폴더에 파일 생성 touch .gitignore
 - 추가하지않을 파일 작성
 ex) 모든 txt -> *.txt
-특정 폴더 안에 txt : 폴더명/*.txt 
+특정 폴더 안에 txt : 폴더명/*.txt  폴더명/*/*.csv
 또는 name.txt 
