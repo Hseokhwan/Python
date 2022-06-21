@@ -1,3 +1,4 @@
+# %%
 from typing import final
 import docx2txt
 import re
@@ -70,7 +71,7 @@ all_df = []
 path = r'Y:\(0000)금융공학연구소\402.파생상품팀\파생상품팀 이슈\06. Live\20210517_삼성증권 Live\텀싯_2110이후'
 fd_list = os.listdir(path)
 
-for file_num, krs_code in Samsung_List.dict_list.items():
+for file_num, krs_code in Samsung_List.dict_list.items():#{'28038': 'KRS000316534', '28039': 'KRS000316535'}.items(): #
     # 파일 이름 찾기 
     for file_name in fd_list:
         if '최종' in file_name: continue
@@ -82,7 +83,7 @@ for file_num, krs_code in Samsung_List.dict_list.items():
             else: file_name = ''
         elif str(file_num) in file_name: break
         else: file_name = ''
-    
+
     try:
         ##### Word 파일 크롤링 ##### 디지털콜, 낙인, 노낙인, 리자드, 먼슬리, SWAP
         if 'docx' in file_name:
@@ -108,17 +109,19 @@ for file_num, krs_code in Samsung_List.dict_list.items():
             # Word 상품 구조
             for struc in text:
                 if '리자드' in struc: break
-                elif '스텝' in struc: break
                 elif '지우개' in struc: break
                 elif '월지급' in struc: break
-                elif '디지털' in struc: break
                 elif '분기지급식' in struc: break
+                elif '스텝' in struc: break
+                elif '디지털' in struc: break
                 else: struc = '구조 확인!!!!'
             
             ### 디지털콜 ###
             if '디지털' in struc:
                 # 발행가액 / 발행일 / 만기상환일 / 행사가격
                 issue_price = re.sub(r'[^0-9]', '', find_index('(3) 1증권당 발행가액', 0))
+                if 'USD' in issue_price: ccy = 'USD'
+                else: ccy = 'KRW'                
                 issue_date = find_index('(9) 발행일', 0)[1:-1]
                 exp_pay_date = find_index('만기일', 2)[1:-1]
                 Event_price = payoff(find_index('(5) 행사가격', 0))
@@ -129,7 +132,6 @@ for file_num, krs_code in Samsung_List.dict_list.items():
                     if '액면가액 x' in i: pay_df.append(i)
                 exp_pay_up = payoff(pay_df[0])
                 exp_pay_down = payoff(pay_df[1])
-
                 exp_pay = Event_price
                 exp_barrier = ''
                 redem_pay = ''
@@ -151,8 +153,12 @@ for file_num, krs_code in Samsung_List.dict_list.items():
                 if 'USD' in price: ccy = 'USD'
                 else: ccy = 'KRW'
                 price = re.sub(r'[^0-9x.]', '', price)
-                s = price.find('x')+1
-                issue_price = round(float(price[s:]) * 100, 0)
+                try: issue_price = round(float(price[price.index('x')+1:]) * 100, 0)
+                except:
+                    try:
+                        price_notional = find_index('명목금액', 0)
+                        issue_price = ( float(re.sub('[^\d]', '', price)) / float(re.sub('[^\d]', '', price_notional)) ) * 10000
+                    except: issue_price = 10000
 
                 # 발행일 / 만기상환일 / 조기상환일  
                 try: issue_date = find_index('(7) 발행일', 0)[1:-1]
@@ -391,26 +397,27 @@ for file_num, krs_code in Samsung_List.dict_list.items():
                 'CSI300': 'SHSZ300 INDEX:285',  '삼성전자 보통주(005930)': 'KR7005930003', 'SK하이닉스 보통주(000660)': 'KR7000660001',
                 '현대차 보통주(005380)': 'KR7005380001', 'NAVER 보통주(035420)': 'KR7035420009', 'POSCO 보통주(005490)': 'KR7005490008',
                 'LG화학 보통주(051910)': 'KR7051910008', 'KT 보통주(030200)':'KR7030200000', '한국전력':'KR7015760002', '카카오 보통주(035720)':'KR7035720002',
-                '하나금융지주 보통주(086790)':'KR7086790003'}
+                '하나금융지주 보통주(086790)':'KR7086790003', '기아 보통주(000270)' : 'KR7000270009', 'KB금융 보통주(105560)':'KR7105560007',
+                'TESLA(TSLA UW)': 'TSLA US EQUITY:432', 'NVIDIA(NVDA UW)': 'NVDA US EQUITY:473', 'AMD(AMD UW)': 'AMD US EQUITY:678'}
         for key, val in under_order.items():
             if key in under: undercd += {val}
         if len(undercd) != len(underlying): undercd = underlying
 
         # 부킹툴 구조
-        if '스텝' in struc:
-            if exp_barrier == '':
-                structure = 'StepDn_NoKI'
-            else: structure = 'StepDn_KI'
+        if '지우개' in struc:
+            structure = '지우개'
         elif '리자드' in struc:
             if exp_barrier == '':
                 structure = 'StepDn_NoKI_[Lizard]'
             else: structure = 'StepDn_KI_[Lizard]'
-        elif '지우개' in struc:
-            structure = '지우개'
         elif '월지급' in struc or '분기지급식' in struc:
             if exp_barrier == '':
                 structure = 'StepDn_NoKI_MtlyCpn'
             else: structure = 'StepDn_KI_MtlyCpn'
+        elif '스텝' in struc:
+            if exp_barrier == '':
+                structure = 'StepDn_NoKI'
+            else: structure = 'StepDn_KI'
         elif '디지털' in struc:
             structure = 'DigitalCall'
         else: structure = struc
@@ -439,17 +446,19 @@ for file_num, krs_code in Samsung_List.dict_list.items():
         avg_close = ''
         redem_date_df = list2df(redem_date, 15)
         coupon_date_df = list2df(coupon_date, 60)
-        swap_date_df = list2df(swap_date, 12)     
+        swap_date_df = list2df(swap_date, 12)
 
         data_list = []     
-        data_list.extend([div+str(file_num)+'회', str(int(issue_price)), issue_date, exp_pay_date, ccy, krs_code, structure, under_type, lag] 
+        try: 
+            data_list.extend([div+str(file_num)+'회', str(int(issue_price)), issue_date, exp_pay_date, ccy, krs_code, structure, under_type, lag] 
             + undercd_df + [exp_pay, exp_barrier, redem_pay] + lizard_num_df + lizard_pay_df + lizard_range_df\
             + [coupon_pay, coupon_range] + redem_range_df + [base_date, exp_date, avg_close] + redem_date_df + coupon_date_df\
             + [swap_spread] + swap_date_df)
+        except Exception as e : print(e)
 
         if len(data_list) == 140 :
             all_df.append(data_list)
-
+        
     except: continue
 
 col_array = ["회차", "발행가액", "발행일", "만기상환일","화폐단위", "KRS코드", "Structure", "기초자산Type", "Settle_Date_Lags"]\

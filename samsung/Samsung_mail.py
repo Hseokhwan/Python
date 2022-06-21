@@ -4,7 +4,7 @@ import datetime
 import os
 
 #mailbox = MailBox('gw.fnpricing.com')
-with MailBox('gw.fnpricing.com').login('deriva@fnpricing.com','Fnp2021!4',initial_folder='INBOX.deriva수신.ELS | DLS | DLB') as mailbox:
+with MailBox('gw.fnpricing.com').login('deriva@fnpricing.com','Fnp2022!1',initial_folder='INBOX.deriva수신.ELS | DLS | DLB') as mailbox:
     Samsung_path = r'Y:\(0000)금융공학연구소\402.파생상품팀\파생상품팀 이슈\06. Live\20210517_삼성증권 Live'
     path=fr'{Samsung_path}\텀싯_2110이후'
     os.chdir(path)

@@ -30,18 +30,18 @@ else:
     elif now.weekday() == 5: effect_date = (now + timedelta(3)).strftime('%Y-%m-%d')
     else: effect_date = (now + timedelta(1)).strftime('%Y-%m-%d')
 
-sysdate = now.strftime('20220106') # 발행리스트 파일 날짜
-effect_date = now.strftime('2022-01-06') # 발행일 날짜
+#sysdate = now.strftime('20220616') # 발행리스트 파일 날짜 YYYYMMDD
+#effect_date = now.strftime('2022-06-17') # 발행일 날짜 YYYY-MM-DD
 
 path = r'Y:\(0000)금융공학연구소\402.파생상품팀\파생상품팀 이슈\06. Live\20210517_삼성증권 Live\발행리스트'
 file_list = os.listdir(path)
 
 for file_name in file_list:
-    if sysdate in file_name:
-        break
+    if sysdate in file_name: break
     else: file_name = ''
 try:
     df = pd.read_excel(fr'{path}\{file_name}', skiprows=[0])
+
     raw_data = df[['발행일','회차','KRS코드','모집방식','유형']].sort_values(by='회차', ascending=True)
     # 공모 제외
     except_row = raw_data['모집방식'].isin(['공모', '공모(기관)'])
@@ -57,7 +57,7 @@ try:
     #notc_list = dict(zip(notc_data['회차'],notc_data['KRS코드']))
 
     dict_list = dict(zip(f_data['회차'],f_data['KRS코드']))
-    
+    print(dict_list)
 except Exception as e:
     print(f'발행리스트 오류, {e}')
 
